@@ -1,5 +1,7 @@
 'use strict';
 
 angular.module('geckoApp', [
-  'ngResource'
+  'ngResource',
+  'ui.bootstrap',
+  'ngProgress'
 ]);
