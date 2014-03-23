@@ -13,8 +13,9 @@ angular.module('geckoApp')
           date: '='
         },
         link: function (scope, element, attrs) {
-          var color = d3.scale.category20c();
-  
+          var color = d3.scale.category20c(),
+                tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.name; });
+          
           var treemap = d3.layout.treemap()
                                  .size([width, height])
                                  .sticky(true)
@@ -35,6 +36,7 @@ angular.module('geckoApp')
             if (err) console.error(err);
             var root, node;
             node = root = data;
+            svg.call(tip);
             var nodes = treemap.nodes(root)
                                .filter(function(d) { return !d.children; });
 
@@ -43,6 +45,13 @@ angular.module('geckoApp')
                           .enter().append("svg:g")
                           .attr("class", "cell")
                           .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                          .on('mouseenter', function(d) {
+                            tip.attr('class', 'd3-tip animate').show(d)
+                          })
+                          .on('mouseleave', function(d) {
+                            tip.attr('class', 'd3-tip').show(d)
+                            tip.hide();
+                          })
                           /*.on("click", function(d) { return zoom(node == d.parent ? root : d.parent); })*/;
 
             cell.append("svg:rect")
@@ -58,6 +67,7 @@ angular.module('geckoApp')
                 .text(function(d) { return d.name; })
                 .style("writing-mode", function (d) { d.w = this.getComputedTextLength(); return d.dx < d.w && d.dy > d.w ? 'tb':'';})
                 .style("opacity", function(d) { return d.dx > d.w || (d.dy > d.w) ? 1 : 0; });
+              
             
             scope.$watch(function () { 
                 return scope.$parent.dateSelected;
