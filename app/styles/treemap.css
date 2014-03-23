@@ -1,13 +1,20 @@
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/*Libre+Baskerville:400, 700, 400i/TeX+Gyre+Heros 400, 700, 400i, 700i"*/
+  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  font-size: 11px;
   margin: auto;
   position: relative;
 }
 
 .node {
-  font: 10px sans-serif;
+  /*font: 10px sans-serif;*/
   line-height: 12px;
   overflow: hidden;
   position: absolute;
   text-indent: 2px;
+}
+
+.font-smoothing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
