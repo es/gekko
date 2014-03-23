@@ -3,7 +3,7 @@
 angular.module('geckoApp')
   .directive('treemap', ['TreemapDataService', '$rootScope', function (TreemapDataService, $rootScope) {
       var margin = {top: 40, right: 10, bottom: 10, left: 10},
-              width = 960 - margin.left - margin.right,
+              width = 920 - margin.left - margin.right,
               height = 500 - margin.top - margin.bottom;
 
       return {
@@ -41,7 +41,10 @@ angular.module('geckoApp')
               }, 
               function(newVal, oldVal) {
                 if ( newVal !== oldVal ) {
-                  TreemapDataService.setDate(newVal, function (err, data) {
+                  var newDate = angular.isDate(newVal)? newVal.toISOString().substring(0, 10) 
+                                                      : newVal;
+                  // console.log('newDate:', newDate);
+                  TreemapDataService.setDate(newDate, function (err, data) {
                     if (err) return console.error(err);
                     node/*.datum(data)*/
                         .data(treemap.nodes)

@@ -1,6 +1,40 @@
 <div style="width: 100%">
-  <treemap></treemap date="dateSelected">
+  <treemap style="margin: 0 auto" date="dateSelected"></treemap>
 </div>
-<select ng-show="datesPresent" ng-model="dateSelected">
+<div class="row">
+ 	<div class="well well-sm col-lg-3" ng-model="$parent.dateSelected">
+		<datepicker min="minDate" max="maxDate" date-disabled="dateInvalid(date, mode)" ng-click="clicked()" show-weeks="showWeeks"></datepicker>
+	</div>
+	<div class="col-lg-6">
+		<div class="btn-group">
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-backward')" ng-class="isActive('fast-backward')" >
+	        	<span class="glyphicon glyphicon-fast-backward"></span>
+	        </button>
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('backward')" ng-class="isActive('backward')" >
+	        	<span class="glyphicon glyphicon-backward"></span>
+	        </button>
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('pause')" ng-class="isActive('pause')" >
+	        	<span class="glyphicon glyphicon-pause"></span>
+	        </button>
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('play')" ng-class="isActive('play')" >
+	        	<span class="glyphicon glyphicon-play"></span>
+	        </button>
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('forward')" ng-class="isActive('forward')" >
+	        	<span class="glyphicon glyphicon-forward"></span>
+	        </button>
+	        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-forward')" ng-class="isActive('fast-forward')" >
+	        	<span class="glyphicon glyphicon-fast-forward"></span>
+	        </button>
+	    </div>
+	    <div class="well">
+			<h1>{{dateControlPanel.val}}</h1>
+			{{dateSelected}}
+			$rootScope.data.currentDate: {{$rootScope.data.currentDate}}
+			
+		</div>
+	</div>
+</div>
+<!-- <select ng-show="datesPresent" ng-model="dateSelected">
 	<option ng-repeat="date in dates" ng-value="date">{{date}}</option>
 </select>
+ -->
