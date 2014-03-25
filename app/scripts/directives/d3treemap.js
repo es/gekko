@@ -1,11 +1,7 @@
 'use strict';
 
 angular.module('geckoApp')
-  .directive('treemap', ['TreemapDataService', '$rootScope', function (TreemapDataService, $rootScope) {
-      var margin = {top: 40, right: 10, bottom: 10, left: 10},
-              width = 920 - margin.left - margin.right,
-              height = 500 - margin.top - margin.bottom;
-
+  .directive('treemap', ['TreemapDataService', '$rootScope', 'HighChartsModal', function (TreemapDataService, $rootScope, HighChartsModal) {
       return {
         restrict: 'E',
         transclude: true,
@@ -13,8 +9,21 @@ angular.module('geckoApp')
           date: '='
         },
         link: function (scope, element, attrs) {
+          $rootScope.data.colors = {};
+          var margin = {top: 50, right: 0, bottom: 0, left: 0},
+              width = angular.element(window).width(),
+              height = angular.element(window).height() - 50,
+              halfway = width/2;
           var color = d3.scale.category20c(),
-                tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.name; });
+                tip = d3.tip()
+                        .attr('class', 'd3-tip')
+                        .direction(function(d) {
+                          if (d.x >= halfway)
+                            return 'w';
+                          else
+                            return 'e';
+                        })
+                        .html(function(d) { return d.name; });
           
           var treemap = d3.layout.treemap()
                                  .size([width, height])
@@ -25,8 +34,8 @@ angular.module('geckoApp')
                       .style('position', 'relative')
                       .style('width', (width + margin.left + margin.right) + 'px')
                       .style('height', (height + margin.top + margin.bottom) + 'px')
-                      .style('margin', '0 auto')
                       .append("svg:svg")
+                      .style('margin-top', '50px')
                       .attr("width", width)
                       .attr("height", height)
                       .append("svg:g")
@@ -45,18 +54,23 @@ angular.module('geckoApp')
                           .enter().append("svg:g")
                           .attr("class", "cell")
                           .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                          .on('click', function (d) {
+                            HighChartsModal.open(d);
+                          })
                           .on('mouseenter', function(d) {
                             tip.attr('class', 'd3-tip animate').show(d)
                           })
                           .on('mouseleave', function(d) {
                             tip.attr('class', 'd3-tip').show(d)
                             tip.hide();
-                          })
-                          /*.on("click", function(d) { return zoom(node == d.parent ? root : d.parent); })*/;
+                          });
 
             cell.append("svg:rect")
                 .call(position)
-                .style("fill", function(d) { return color(d.parent.name); });
+                .style("fill", function(d) { 
+                  $rootScope.data.colors[d.parent.name] = color(d.parent.name);
+                  return color(d.parent.name); 
+                });
 
             cell.append("svg:text")
                 .attr("x", function(d) { return d.dx / 2; })

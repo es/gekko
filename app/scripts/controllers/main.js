@@ -13,12 +13,21 @@ angular.module('geckoApp')
             $scope.currentData = $rootScope.data.currentDate;
             $scope.minDate = $rootScope.data.datesArr[0];
             $scope.maxDate = dateParseService.parse($rootScope.data.datesArr[$rootScope.data.datesArr.length - 1]);
+            $scope.sectors = $rootScope.data.sector2subSector;
         }
     });
     $scope.clicked = function () {
         $scope.dateSelected = $scope.dateSelected;
         dateIndex = $rootScope.data.datesArr.indexOf($scope.dateSelected.toISOString().substring(0, 10));
     };
+
+    $scope.sectorColor = function (sector) {
+        return {
+            "background": $rootScope.data.colors[sector],
+            "vertical-align": "middle" 
+        };
+    };
+
 
     $scope.dateInvalid = function (date, mode) {
         if (!$rootScope.data.datesArr) return true;

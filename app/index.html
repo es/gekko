@@ -14,17 +14,18 @@
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/select2/select2.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <style type="text/css">
       body {
-        padding-top: 50px;
         background-color: #e5e5e5;
       }
     </style>
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/treemap.css">
     <link rel="stylesheet" href="styles/d3-tooltip.css">
+    <link rel="stylesheet" href="styles/highchart-modal.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -34,7 +35,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+    <div style="width:100%; height:100%;" ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
     <!-- <div class="container" ng-include="'views/footer.html'"></div> -->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -52,6 +53,7 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
+
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/jquery.js"></script>
@@ -59,9 +61,15 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/d3-tip/index.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+    <script src="bower_components/d3-tip/index.js"></script>
+    <script src="bower_components/highcharts-ng/dist/highcharts-ng.js"></script>
+    <script src="bower_components/highcharts.com/js/highcharts.src.js"></script>
+    <script src="bower_components/highcharts.com/js/highcharts-more.src.js"></script>
+    <script src="bower_components/highcharts.com/js/modules/exporting.src.js"></script>
+    <script src="bower_components/select2/select2.js"></script>
+    <script src="bower_components/angular-ui-select2/src/select2.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -71,6 +79,9 @@
     <script src="scripts/services/treemapDataService.js"></script>
     <script src="scripts/directives/d3Treemap.js"></script>
     <script src="scripts/services/dateParseService.js"></script>
+    <script src="scripts/services/highChartsModal.js"></script>
+    <script src="scripts/controllers/highcharts.js"></script>
+    <script src="scripts/services/seriesData.js"></script>
     <!-- endbuild -->
 </body>
 </html>

@@ -1,34 +1,85 @@
-<div style="width: 100%">
-  <treemap style="margin: 0 auto" date="dateSelected"></treemap>
-</div>
-<div class="row">
- 	<div class="well well-sm col-lg-3" ng-model="$parent.dateSelected">
-		<datepicker min="minDate" max="maxDate" date-disabled="dateInvalid(date, mode)" ng-click="clicked()" show-weeks="showWeeks"></datepicker>
-	</div>
-	<div class="col-lg-6">
-		<div class="btn-group">
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-backward')" ng-class="isActive('fast-backward')" >
-	        	<span class="glyphicon glyphicon-fast-backward"></span>
-	        </button>
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('backward')" ng-class="isActive('backward')" >
-	        	<span class="glyphicon glyphicon-backward"></span>
-	        </button>
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('pause')" ng-class="isActive('pause')" >
-	        	<span class="glyphicon glyphicon-pause"></span>
-	        </button>
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('play')" ng-class="isActive('play')" >
-	        	<span class="glyphicon glyphicon-play"></span>
-	        </button>
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('forward')" ng-class="isActive('forward')" >
-	        	<span class="glyphicon glyphicon-forward"></span>
-	        </button>
-	        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-forward')" ng-class="isActive('fast-forward')" >
-	        	<span class="glyphicon glyphicon-fast-forward"></span>
-	        </button>
-	    </div>
-	</div>
-</div>
+<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">Gekko Market Visualizer</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+            	<li class="dropdown" style="margin-right: 10px">
+		          	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Market Sector Glossary <b class="caret"></b></a>
+		          	<ul class="dropdown-menu">
+		          		<li ng-repeat="(key, data) in sectors">
+		          			<a href="#"> <div class="square" ng-style="sectorColor(key)"></div> - {{key}}</a>
+		          		</li>
+		          	</ul>
+		        </li>
+            	<li style="margin-top: 9px">
+					<input type="text" show-button-bar="false" class="form-control" datepicker-popup="yyyy/MM/dd" ng-click="clicked()" ng-model="$parent.dateSelected" max="maxDate" min="minDate" show-weeks="false" date-disabled="dateInvalid(date, mode)" close-text="Close" />	
+				</li>
+				<li ng-class="isActive('fast-backward')">
+					<a ng-click="dateControl('fast-backward')" href="#">
+						<span class="glyphicon glyphicon-fast-backward"></span>
+					</a>
+				</li>
+				<li ng-class="isActive('backward')">
+					<a ng-click="dateControl('backward')" href="#">
+						<span class="glyphicon glyphicon-backward"></span>
+					</a>
+				</li>
+				<li ng-class="isActive('pause')">
+					<a ng-click="dateControl('pause')" href="#">
+						<span class="glyphicon glyphicon-pause"></span>
+					</a>
+				</li>
+				<li ng-class="isActive('play')">
+					<a ng-click="dateControl('play')" href="#">
+						<span class="glyphicon glyphicon-play"></span>
+					</a>
+				</li>
+				<li ng-class="isActive('forward')">
+					<a ng-click="dateControl('forward')" href="#">
+						<span class="glyphicon glyphicon-forward"></span>
+					</a>
+				</li>
+				<li ng-class="isActive('fast-forward')">
+					<a ng-click="dateControl('fast-forward')" href="#">
+						<span class="glyphicon glyphicon-fast-forward"></span>
+					</a>
+				</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<treemap date="dateSelected"></treemap>
 <!-- <select ng-show="datesPresent" ng-model="dateSelected">
 	<option ng-repeat="date in dates" ng-value="date">{{date}}</option>
 </select>
  -->
+
+ <!-- <div class="row">
+			 	<div class="well well-sm col-lg-3" ng-model="$parent.dateSelected">
+					<datepicker min="minDate" max="maxDate" date-disabled="dateInvalid(date, mode)" ng-click="clicked()" show-weeks="showWeeks"></datepicker>
+				</div>
+				<div class="col-sm-6">
+					<div class="btn-group">
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-backward')" ng-class="isActive('fast-backward')" >
+				        	<span class="glyphicon glyphicon-fast-backward"></span>
+				        </button>
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('backward')" ng-class="isActive('backward')" >
+				        	<span class="glyphicon glyphicon-backward"></span>
+				        </button>
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('pause')" ng-class="isActive('pause')" >
+				        	<span class="glyphicon glyphicon-pause"></span>
+				        </button>
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('play')" ng-class="isActive('play')" >
+				        	<span class="glyphicon glyphicon-play"></span>
+				        </button>
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('forward')" ng-class="isActive('forward')" >
+				        	<span class="glyphicon glyphicon-forward"></span>
+				        </button>
+				        <button type="button" class="btn btn-primary" ng-click="dateControl('fast-forward')" ng-class="isActive('fast-forward')" >
+				        	<span class="glyphicon glyphicon-fast-forward"></span>
+				        </button>
+				    </div>
+				</div>
+			</div> -->

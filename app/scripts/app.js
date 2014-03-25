@@ -3,5 +3,7 @@
 angular.module('geckoApp', [
   'ngResource',
   'ui.bootstrap',
-  'ngProgress'
+  'ngProgress',
+  'highcharts-ng',
+  'ui.select2'
 ]);

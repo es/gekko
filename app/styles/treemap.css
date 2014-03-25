@@ -4,6 +4,9 @@ body {
   font-size: 11px;
   margin: auto;
   position: relative;
+  -moz-osx-font-smoothing: grayscale;
+   -webkit-font-smoothing: antialiased;
+
 }
 
 .node {

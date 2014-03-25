@@ -1,31 +1,35 @@
 'use strict';
 
 angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope', function ($http, $rootScope) {
-    var datesArr = [],
-        weightsDB = {},
-        currentDate,
+    var currentDate,
         onloadCbArr = [],
         currentTreemapData = {
             name: 'Treemap',
             children: []
-        }, sector2subSector = {}, subSector2sector = {};
+        };
+    
+    $rootScope.data = {};
+    $rootScope.data.datesArr = [];
+    $rootScope.data.weightsDB = {};
+    $rootScope.data.sector2subSector = {}
+    $rootScope.data.subSector2sector = {}
     
     var onload = function (cb) {
         onloadCbArr.push(cb);
     };
 
-    $http.get('http://gekko.stolarsky.com/map/').success(function(data, status, headers, config) {
+    $http.get('http://localhost:3000/map/').success(function(data, status, headers, config) {
         for (var i = 0, len = data.length; i < len; i++) {
-            if (!sector2subSector[ data[i].sector ]) {
+            if (!$rootScope.data.sector2subSector[ data[i].sector ]) {
                 currentTreemapData.children.push({
                     name: data[i].sector,
                     children: []
                 });
             }
                 
-            if(sector2subSector[ data[i].sector ]) sector2subSector[ data[i].sector ].push(data[i].sub_sector);
-            else sector2subSector[ data[i].sector ] = [data[i].sub_sector];
-            subSector2sector[ data[i].sub_sector ] = data[i].sector;
+            if($rootScope.data.sector2subSector[ data[i].sector ]) $rootScope.data.sector2subSector[ data[i].sector ].push(data[i].sub_sector);
+            else $rootScope.data.sector2subSector[ data[i].sector ] = [data[i].sub_sector];
+            $rootScope.data.subSector2sector[ data[i].sub_sector ] = data[i].sector;
         }
     });
 
@@ -37,13 +41,13 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
         };
     };
 
-    $http.get('http://gekko.stolarsky.com/dates').success(function(dates, status, headers, config) {
-        $rootScope.data.datesArr = datesArr = dates;
+    $http.get('http://localhost:3000/dates').success(function(dates, status, headers, config) {
+        $rootScope.data.datesArr = dates;
         $rootScope.data.validDates = {};
-        $rootScope.data.currentDate = currentDate = datesArr[0];
-        $http.get('http://gekko.stolarsky.com/weights/' + currentDate).success(function(data, status2, headers2, config2) {
+        $rootScope.data.currentDate = currentDate = $rootScope.data.datesArr[0];
+        $http.get('http://localhost:3000/weights/' + currentDate).success(function(data, status2, headers2, config2) {
             //process data
-            weightsDB[currentDate] = data;
+            $rootScope.data.weightsDB[currentDate] = data;
             process(data);
             for (var cb in onloadCbArr) {
                 onloadCbArr[cb](null, currentTreemapData);    
@@ -51,8 +55,8 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
         });
         
         var temp;
-        for (var i = datesArr.length - 1; i >= 0; i--) {
-            temp = parse(datesArr[i]);
+        for (var i = $rootScope.data.datesArr.length - 1; i >= 0; i--) {
+            temp = parse($rootScope.data.datesArr[i]);
             if (!$rootScope.data.validDates[temp.year]) 
                 $rootScope.data.validDates[temp.year] = {};
             if (!$rootScope.data.validDates[temp.year][temp.month]) 
@@ -66,10 +70,10 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
         var tempHashTable = {};    
         for (var i = 0, len = data.length; i < len; i++) {
             data[i].name = data[i].sub_sector;
-            if(tempHashTable[subSector2sector[data[i].sub_sector]])
-                tempHashTable[subSector2sector[data[i].sub_sector]].push(angular.copy(data[i], {}));
+            if(tempHashTable[$rootScope.data.subSector2sector[data[i].sub_sector]])
+                tempHashTable[$rootScope.data.subSector2sector[data[i].sub_sector]].push(angular.copy(data[i], {}));
             else
-                tempHashTable[subSector2sector[data[i].sub_sector]] = [angular.copy(data[i], {})];
+                tempHashTable[$rootScope.data.subSector2sector[data[i].sub_sector]] = [angular.copy(data[i], {})];
         }
 
         for (var i = 0, len = currentTreemapData.children.length; i < len; i++) {
@@ -93,15 +97,15 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
     };
 
     var setDate = function (date, cb) {
-        if (datesArr.indexOf(date) === -1) return;
+        if ($rootScope.data.datesArr.indexOf(date) === -1) return;
         currentDate = date;
-        if (weightsDB[currentDate]) {
-            update(weightsDB[currentDate]);
+        if ($rootScope.data.weightsDB[currentDate]) {
+            update($rootScope.data.weightsDB[currentDate]);
             cb(null, currentTreemapData);
         }
         else {
-            $http.get('http://gekko.stolarsky.com/weights/' + currentDate).success(function(data, status, headers, config) {
-                weightsDB[currentDate] = data;
+            $http.get('http://localhost:3000/weights/' + currentDate).success(function(data, status, headers, config) {
+                $rootScope.data.weightsDB[currentDate] = data;
                 update(data);
                 cb(null, currentTreemapData);
             });
