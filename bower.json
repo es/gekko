@@ -14,7 +14,8 @@
     "d3-tip": "~0.6.4",
     "highcharts-ng": "~0.0.5",
     "highcharts.com": "~3.0.9",
-    "angular-ui-select2": "~0.0.5"
+    "angular-ui-select2": "~0.0.5",
+    "components-font-awesome": "~4.0.3"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",

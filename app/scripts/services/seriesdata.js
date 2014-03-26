@@ -8,14 +8,8 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
             arr = [];
 
         for (var i = subsectorsArr.length - 1; i >= 0; i--) {
-            $http.get('http://localhost:3000/series/' + angular.copy(subsectorsArr[i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
-                /*DONT FORGET TO CHANGE THIS*/
-                var subSector = config.url.substring(29).replace('%20', ' ').replace('%26', '&');
-                
-                // $rootScope.data.series[sector][subSector] = {
-                //     name: subSector,
-                //     data: data
-                // };
+            $http.get('http://gekko.stolarsky.com/series/' + angular.copy(subsectorsArr[i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
+                var subSector = config.url.substring(34).replace('%20', ' ').replace('%26', '&');
                 arr.push({
                     name: subSector,
                     data: data
@@ -28,13 +22,9 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
     };
 
     var get = function (sector, cb) {
-        console.log('$rootScope.data.series[sector]:', $rootScope.data.series[sector]);
         if (false && angular.isDefined($rootScope.data.series[sector])) {
             var arr = [];
-            console.log('$rootScope.data.series[sector]:', $rootScope.data.series[sector]);
             for (var subSector in $rootScope.data.series[sector]) {
-                console.log('subSector:', subSector);
-                console.log('$rootScope.data.series[sector][subSector]:', $rootScope.data.series[sector][subSector]);
                 arr.push(angular.copy($rootScope.data.series[sector][subSector], {}));
             }
             cb(null, arr);
@@ -46,9 +36,8 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
             var sectorsLeft = $rootScope.data.sector2subSector[sector].length;
             for (var i = $rootScope.data.sector2subSector[sector].length - 1; i >= 0; i--) {
                 console.log("angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26'):", angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26'));
-                $http.get('http://localhost:3000/series/' + angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
-                    /*DONT FORGET TO CHANGE THIS*/
-                    var subSector = config.url.substring(29).replace('%20', ' ').replace('%26', '&');
+                $http.get('http://gekko.stolarsky.com/series/' + angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
+                    var subSector = config.url.substring(34).replace('%20', ' ').replace('%26', '&');
                     
                     $rootScope.data.series[sector][subSector] = {
                         name: subSector,

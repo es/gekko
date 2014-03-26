@@ -1,12 +1,10 @@
 body {
-	/*Libre+Baskerville:400, 700, 400i/TeX+Gyre+Heros 400, 700, 400i, 700i"*/
   font-family: "Montserrat", Helvetica, Arial, sans-serif;
   font-size: 11px;
   margin: auto;
   position: relative;
   -moz-osx-font-smoothing: grayscale;
    -webkit-font-smoothing: antialiased;
-
 }
 
 .node {

@@ -18,7 +18,7 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
         onloadCbArr.push(cb);
     };
 
-    $http.get('http://localhost:3000/map/').success(function(data, status, headers, config) {
+    $http.get('http://gekko.stolarsky.com/map/').success(function(data, status, headers, config) {
         for (var i = 0, len = data.length; i < len; i++) {
             if (!$rootScope.data.sector2subSector[ data[i].sector ]) {
                 currentTreemapData.children.push({
@@ -41,11 +41,11 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
         };
     };
 
-    $http.get('http://localhost:3000/dates').success(function(dates, status, headers, config) {
+    $http.get('http://gekko.stolarsky.com/dates').success(function(dates, status, headers, config) {
         $rootScope.data.datesArr = dates;
         $rootScope.data.validDates = {};
         $rootScope.data.currentDate = currentDate = $rootScope.data.datesArr[0];
-        $http.get('http://localhost:3000/weights/' + currentDate).success(function(data, status2, headers2, config2) {
+        $http.get('http://gekko.stolarsky.com/weights/' + currentDate).success(function(data, status2, headers2, config2) {
             //process data
             $rootScope.data.weightsDB[currentDate] = data;
             process(data);
@@ -104,7 +104,7 @@ angular.module('geckoApp').service('TreemapDataService', ['$http', '$rootScope',
             cb(null, currentTreemapData);
         }
         else {
-            $http.get('http://localhost:3000/weights/' + currentDate).success(function(data, status, headers, config) {
+            $http.get('http://gekko.stolarsky.com/weights/' + currentDate).success(function(data, status, headers, config) {
                 $rootScope.data.weightsDB[currentDate] = data;
                 update(data);
                 cb(null, currentTreemapData);
