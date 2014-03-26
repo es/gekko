@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <div class="">
+    	<select style="width: 80%; margin-left: 10%" ui-select2 ng-change="update(select2)" multiple ng-model="select2">
+		    	<optgroup ng-repeat="sector in sectors" label="{{sector.name}}">
+            <option ng-repeat="subsector in sector.data" ng-value="subsector">{{subsector}}</option>
+          </optgroup>
+		  </select>
+    </div>
+</div>
+<div class="modal-body">
+  <select id="date-select" ng-change="changeRange(selectedMonth)" ng-init="selectedMonth = months[0]" ng-options="month | chartFilter for month in months" ng-model="selectedMonth"></select>
+  <div id="chart-container" style="width: 100%"></div>
+  <table style="margin-top: 10px" class="table table-bordered">
+      <thead>
+        <td>Subsector</td>
+        <td>Min</td>
+        <td>Max</td>
+      </thead>
+      <tbody>
+        <tr ng-repeat="subsector in minMaxArr">
+          <td>{{subsector.subsector}}</td>
+          <td>{{subsector.min | dollars}}</td>
+          <td>{{subsector.max | dollars}}</td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()"> Close</button>
+</div>

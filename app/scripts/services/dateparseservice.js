@@ -14,7 +14,13 @@ angular.module('geckoApp')
             return new Date (Number (year), Number (month - 1), Number (day));
         };
 
+        // convert year and month to date obj
+        var miniParse = function (month, year) {
+            return new Date (Number(year), Number(month - 1));
+        };
+
         return {
-            parse: parse
+            parse: parse,
+            miniParse: miniParse
         };
   });
