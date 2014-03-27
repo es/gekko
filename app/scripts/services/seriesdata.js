@@ -35,7 +35,6 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
             $rootScope.data.series[sector] = {};
             var sectorsLeft = $rootScope.data.sector2subSector[sector].length;
             for (var i = $rootScope.data.sector2subSector[sector].length - 1; i >= 0; i--) {
-                console.log("angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26'):", angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26'));
                 $http.get('http://gekko.stolarsky.com/series/' + angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
                     var subSector = config.url.substring(34).replace('%20', ' ').replace('%26', '&');
                     

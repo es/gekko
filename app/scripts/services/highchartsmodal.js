@@ -15,7 +15,6 @@ angular.module('geckoApp').service('HighChartsModal',['$modal', function ($modal
                 }
             }
         });
-        console.log('opening!:', d);
     };
 
     return {

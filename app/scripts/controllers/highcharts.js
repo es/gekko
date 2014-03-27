@@ -1,13 +1,11 @@
 'use strict';
 
-angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstance', 'sector', 'subsector', 'SeriesData', '$compile', '$rootScope', 'dateParseService', '$interval', function ($scope, $modalInstance, sector, subsector, SeriesData, $compile, $rootScope, dateParseService, $interval) {
+angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstance', 'sector', 'subsector', 'SeriesData', '$compile', '$rootScope', 'dateParseService', '$interval', '$timeout', function ($scope, $modalInstance, sector, subsector, SeriesData, $compile, $rootScope, dateParseService, $interval, $timeout) {
     $scope.sector = sector;
     var seriesOptions = [];
     $scope.select2Options = {
         'multiple': true
     };
-
-    console.log('$rootScope.data.validDates:', $rootScope.data.validDates);
     
     $scope.months = [];
     for (var year in $rootScope.data.validDates) {
@@ -61,6 +59,10 @@ angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstan
                 },
                 navigator: {
                     enabled : true,
+                    series: {
+                        id: 'nav'
+                    },
+                    adaptToUpdatedData: true
                 },
                 plotOptions: {
                     series: {
@@ -90,50 +92,53 @@ angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstan
         // $scope.getMinMax();
     });
 
-    var oldMin = void 0, oldMax = void 0;
+    var oldMin = void 0, oldMax = void 0, oldLength = 0;
     $interval(function () {
         if (Math.round($rootScope.data.chart.xAxis[0].min) !== oldMin || Math.round($rootScope.data.chart.xAxis[0].max) !== oldMax) {
             oldMin = Math.round($rootScope.data.chart.xAxis[0].min);
             oldMax = Math.round($rootScope.data.chart.xAxis[0].max);
-
-            // Try to optimize later?
-            var simpleIndexOf = function (searchElement, arr, larger) {
-                if (!angular.isDefined(searchElement)) return -1;
-                for (var i = 0, len = arr.length; i < len; i++) {
-                    if (arr[i][0] <= searchElement && i + 1 < len && arr[i + 1][0] >= searchElement)
-                        return larger ? ++i : i;
-                }
-                return -1;
-            };
-
-            try {
-                var arr = [];
-                for (var i = 0, len = $scope.chartConfig.series.length; i < len; i++) {
-                    var minI = simpleIndexOf(oldMin, angular.copy($scope.chartConfig.series[i].data, []), false),
-                        maxI = simpleIndexOf(oldMax, angular.copy($scope.chartConfig.series[i].data, []), true);
-                    if (!angular.isNumber(minI) || minI === -1) minI = 0;
-                    if (!angular.isNumber(maxI) || maxI === -1) maxI = $scope.chartConfig.series[i].data.length - 1;
-                    var tempArr = $scope.chartConfig.series[i].data.slice(minI, maxI).sort(function (a, b) {
-                        if (a[1] === b[1])
-                            return 0;
-                        else if (a[1] > b[1])
-                            return 1;
-                        else
-                            return -1;
-                    });
-                    arr.push({
-                        subsector:  angular.copy($scope.chartConfig.series[i].name),
-                        max: tempArr[tempArr.length - 1][1],
-                        min: tempArr[0][1]
-                    })
-                }
-                $scope.minMaxArr = arr;
-            }
-            catch (e) {
-                console.error(e);
-            }
+            updateMinMax();
         }
     }, 750);
+
+    var updateMinMax = function () {
+        // Try to optimize later?
+        var simpleIndexOf = function (searchElement, arr, larger) {
+            if (!angular.isDefined(searchElement)) return -1;
+            for (var i = 0, len = arr.length; i < len; i++) {
+                if (arr[i][0] <= searchElement && i + 1 < len && arr[i + 1][0] >= searchElement)
+                    return larger ? ++i : i;
+            }
+            return -1;
+        };
+
+        try {
+            var arr = [];
+            for (var i = 0, len = $scope.chartConfig.series.length; i < len; i++) {
+                var minI = simpleIndexOf(Math.round($rootScope.data.chart.xAxis[0].min), angular.copy($scope.chartConfig.series[i].data, []), false),
+                    maxI = simpleIndexOf(Math.round($rootScope.data.chart.xAxis[0].max), angular.copy($scope.chartConfig.series[i].data, []), true);
+                if (!angular.isNumber(minI) || minI === -1) minI = 0;
+                if (!angular.isNumber(maxI) || maxI === -1) maxI = $scope.chartConfig.series[i].data.length - 1;
+                var tempArr = $scope.chartConfig.series[i].data.slice(minI, maxI).sort(function (a, b) {
+                    if (a[1] === b[1])
+                        return 0;
+                    else if (a[1] > b[1])
+                        return 1;
+                    else
+                        return -1;
+                });
+                arr.push({
+                    subsector:  angular.copy($scope.chartConfig.series[i].name),
+                    max: tempArr[tempArr.length - 1][1],
+                    min: tempArr[0][1]
+                })
+            }
+            $scope.minMaxArr = arr;
+        }
+        catch (e) {
+            console.error(e);
+        }
+    };
     
     $scope.minMaxArr = [];
     $scope.selectedMonth = 'noMonth';
@@ -154,18 +159,17 @@ angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstan
     $scope.update = function (currentSubsectors) {
         SeriesData.update(currentSubsectors, function (err, data) {
             $scope.chartConfig.series = data;
+            updateMinMax();
+
+            /*$timeout(function() {
+                var nav = $rootScope.data.chart.get('nav');
+                console.log('nav:', nav);
+                nav.setData(data[0].data);
+                    // nav.series.redraw(true);
+            }, 100);*/
+
         });
     };
-
-    $scope.test = function () {
-        console.log('$rootScope.data.chart.xAxis[0].dataMin:', $rootScope.data.chart.xAxis[0].min);
-        console.log('$rootScope.data.chart.xAxis[0].dataMax:', $rootScope.data.chart.xAxis[0].max);
-        console.log('$rootScope.data.chart:', $rootScope.data.chart);
-    };
-
-    /*$scope.getMinMax = function () {
-        
-    };*/
 
     $scope.ok = function () {
         $modalInstance.close('close');
