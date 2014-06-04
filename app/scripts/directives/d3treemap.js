@@ -73,13 +73,13 @@ angular.module('geckoApp')
                 });
 
             cell.append("svg:text")
-                .attr("x", function(d) { return d.dx / 2; })
-                .attr("y", function(d) { return d.dy / 2; })
+                .attr("x", function(d) { return (d.dx / 2); })
+                .attr("y", function(d) { return (d.dy / 2); })
                 .attr("dy", ".35em")
                 .attr("class", "font-smoothing")
                 .attr("text-anchor", "middle")
                 .text(function(d) { return d.name; })
-                .style("writing-mode", function (d) { d.w = this.getComputedTextLength(); return d.dx < d.w && d.dy > d.w ? 'tb':'';})
+                .attr("transform", textRotate)
                 .style("opacity", function(d) { return d.dx > d.w || (d.dy > d.w) ? 1 : 0; });
               
             
@@ -107,6 +107,7 @@ angular.module('geckoApp')
                     t.select("text")
                         .attr("x", function(d) { return d.dx / 2; })
                         .attr("y", function(d) { return d.dy / 2; })
+                        .attr("transform", textRotate)
                         .style("opacity", function(d) { return d.dx > d.w || (d.dy > d.w) ? 1 : 0; });
                   });
                 }
@@ -119,6 +120,12 @@ angular.module('geckoApp')
                 .style('top', function(d) { return d.y + 'px'; })
                 .attr('width', function(d) { return Math.max(0, d.dx - 1) + 'px'; })
                 .attr('height', function(d) { return Math.max(0, d.dy - 1) + 'px'; });
+          }
+
+          function textRotate (d) {
+            d.w = this.getComputedTextLength();
+            if (d.dx < d.w && d.dy > d.w) return "rotate(90, " + (d.dx / 2) + ", " + (d.dy / 2) + ")";
+            else return "";
           }
         }
       };
