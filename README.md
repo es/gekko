@@ -8,6 +8,9 @@
 The data for the treemap as well as the Highstock comparison is being served by an API written in Node.js. The code for that API can be found here: [gekko-backend][5].
 
 
+## Development
+After installing client libraries go into the highcharts directory and change `highcharts.src.js` to `highstock.src.js` under main. Then make sure that the appropiate files are loaded in index. 
+
 ### Libraries
 - [D3][6]
 - [Highstocks][7] 

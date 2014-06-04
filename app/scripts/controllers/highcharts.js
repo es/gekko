@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstance', 'sector', 'subsector', 'SeriesData', '$compile', '$rootScope', 'dateParseService', '$interval', '$timeout', function ($scope, $modalInstance, sector, subsector, SeriesData, $compile, $rootScope, dateParseService, $interval, $timeout) {
+angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstance', 'sector', 'subsector', 'SeriesData', '$compile', '$rootScope', 'dateParseService', '$interval', '$timeout', '$window', function ($scope, $modalInstance, sector, subsector, SeriesData, $compile, $rootScope, dateParseService, $interval, $timeout, $window) {
     $scope.sector = sector;
     var seriesOptions = [];
     $scope.select2Options = {
@@ -78,18 +78,19 @@ angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstan
             series: seriesOptions
         };
 
-        var highchart = angular.element(document.createElement('highchart'))
+        var highchartElm = angular.element(document.createElement('highchart'))
                                .attr('id', 'chart')
-                               .attr('config', 'chartConfig');
+                               .attr('config', 'chartConfig')
+                               .attr('style', 'width: 858px');
 
-        var el = $compile( highchart )( $scope );
-          
+        var el = $compile( highchartElm )( $scope );
+        
+        $rootScope.data.chart = $window.Highcharts.charts[0];
+
         //where do you want to place the new element?
-        angular.element('#chart-container').append(highchart);  
+        angular.element('#chart-container').append(highchartElm);  
         $scope.insertHere = el;
-        // console.log('$scope.insertHere:', $scope.insertHere);
 
-        // $scope.getMinMax();
     });
 
     var oldMin = void 0, oldMax = void 0, oldLength = 0;
@@ -160,14 +161,6 @@ angular.module('geckoApp').controller('HighchartsCtrl', ['$scope', '$modalInstan
         SeriesData.update(currentSubsectors, function (err, data) {
             $scope.chartConfig.series = data;
             updateMinMax();
-
-            /*$timeout(function() {
-                var nav = $rootScope.data.chart.get('nav');
-                console.log('nav:', nav);
-                nav.setData(data[0].data);
-                    // nav.series.redraw(true);
-            }, 100);*/
-
         });
     };
 

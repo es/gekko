@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', function ($rootScope, $http) {
+angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', 'apiUrl', function ($rootScope, $http, apiUrl) {
     $rootScope.data.series = {};
 
     var update = function (subsectorsArr, cb) {
@@ -8,8 +8,8 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
             arr = [];
 
         for (var i = subsectorsArr.length - 1; i >= 0; i--) {
-            $http.get('http://gekko.stolarsky.com/series/' + angular.copy(subsectorsArr[i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
-                var subSector = config.url.substring(34).replace('%20', ' ').replace('%26', '&');
+            $http.get(apiUrl + '/series/' + angular.copy(subsectorsArr[i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
+                var subSector = config.url.substring(apiUrl.length + 8).replace('%20', ' ').replace('%26', '&');
                 arr.push({
                     name: subSector,
                     data: data
@@ -35,8 +35,8 @@ angular.module('geckoApp').service('SeriesData', ['$rootScope', '$http', functio
             $rootScope.data.series[sector] = {};
             var sectorsLeft = $rootScope.data.sector2subSector[sector].length;
             for (var i = $rootScope.data.sector2subSector[sector].length - 1; i >= 0; i--) {
-                $http.get('http://gekko.stolarsky.com/series/' + angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
-                    var subSector = config.url.substring(34).replace('%20', ' ').replace('%26', '&');
+                $http.get(apiUrl + '/series/' + angular.copy($rootScope.data.sector2subSector[sector][i]).replace(' ', '%20').replace('&', '%26')).success(function(data, status, headers, config) {
+                    var subSector = config.url.substring(apiUrl.length + 8).replace('%20', ' ').replace('%26', '&');
                     
                     $rootScope.data.series[sector][subSector] = {
                         name: subSector,
