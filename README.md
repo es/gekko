@@ -11,6 +11,9 @@ The data for the treemap as well as the Highstock comparison is being served by 
 ## Development
 After installing client libraries go into the highcharts directory and change `highcharts.src.js` to `highstock.src.js` under main. Then make sure that the appropiate files are loaded in index. 
 
+## Deploy
+You can generate a production ready version of Gekko by using the `grunt build` command. Note: you will need to manually copy the fonts from `bower_components/components-font-awesome/fonts` folder into `dist/fonts` as well as copy `select2-spinner.gif` & `select2.png` from `bower_components/select2` into `dist/styles`
+
 ### Libraries
 - [D3][6]
 - [Highstocks][7] 
