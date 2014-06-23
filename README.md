@@ -1,6 +1,6 @@
 #Gekko - Market Visualizer
 
-[Gekko][1] is a market share visualization app written with [D3][2]'s Treemap, [Highstocks][3], & [AngularJS][4]. It allows you to see the size of market sectors and how they change through time.
+[Gekko][1] is a market share visualization app written using [D3][2]'s Treemap, [Highstocks][3], & [AngularJS][4]. It allows you to see the size of market sectors and how they change through time.
 
 **The subsectors are clickable!** When you click on one, a dialog with each related subsector and their prices will appear. Within this same dialog you can compare non-related sectors to each other.
 
